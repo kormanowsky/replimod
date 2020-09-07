@@ -14,5 +14,8 @@
     "rest-client"
   ],
   "author": "Mikhail Kormanowsky",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "another-rest-client": "^0.5.0"
+  }
 }
