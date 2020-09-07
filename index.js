@@ -43,18 +43,18 @@ class Model {
      * Инициализирует объект модели. Если аргумент @param arg - число, будет проинициализирован объект с ID, равным данному числу.
      * Если аргумент - объект, все его свойства будут сопированы в создаваемый объект. Если не было передано ни одного аргумента,
      * будет создан пустой экземпляр (что удобно при использовании во внутренних методах, например, при создании нового объекта).
-     * @param {Number|Object} arg Аргумент.
+     * @param {Number|String} arg Аргумент.
      * @see #fillIn
      * @see #$resource
      * @since 1.0.0
      * @author Михаил Кормановский
      */
     constructor(arg) {
-        const api = new RestClient(getAPIHost());
-        resourceName = camelCaseToHyphen(this.constructor.config.resource);
-        api.res(resourceName).res(this.constructor.config.innerResources);
+        const api = new RestClient(this.config.baseURL),
+            resourceName = camelCaseToHyphen(this.config.resource);
+        api.res(resourceName).res(this.config.innerResources);
         api.on("request", xhr => {
-            this.constructor.config.requestListeners.forEach(listener => listener(xhr));
+            this.config.requestListeners.forEach(listener => listener(xhr));
         });
         this.$resource = api[resourceName];
         if (!isNaN(parseInt(arg))) {
@@ -66,6 +66,16 @@ class Model {
     }
 
     /**
+     * Возвращает конфигурацию модели.
+     * @returns {{}} Конфигурация модели (по умолчанию пуста)
+     * @since 1.0.0
+     * @author Михаил Кормановский
+     */
+    get config() {
+        return {};
+    }
+
+    /**
      * Заполняет данный экземпляр данными из объекта @param obj . Перед заполнением будет вызван метод @method Model#beforeFillIn ,
      * после заполнения - метод @method Model#afterFillIn .
      * @param {Object} obj Объект с новыми данными.
@@ -74,13 +84,13 @@ class Model {
      * @author Михаил Кормановский
      */
     fillIn(obj) {
-        if (this.beforeFillIn instanceof Function) {
-            this.beforeFillIn(obj);
+        if (this.config.beforeFillIn instanceof Function) {
+            this.config.beforeFillIn(obj);
         }
         for (let prop in obj) {
             if (obj[prop] instanceof String) {
                 let date = new Date(obj[prop]);
-                if (date.toString() != "Invalid Date") {
+                if (date.toString() && date.toString() !== "Invalid Date") {
                     obj[prop] = date;
                 }
             }
@@ -91,8 +101,8 @@ class Model {
         if (this.id) {
             this.$resource = this.$resource(this.id);
         }
-        if (this.afterFillIn instanceof Function) {
-            this.afterFillIn(obj);
+        if (this.config.afterFillIn instanceof Function) {
+            this.config.afterFillIn(obj);
         }
         return this;
     }
@@ -188,6 +198,10 @@ class ModelBuilder {
             baseURL: null,
             requestListeners: [],
             innerResources: [],
+            beforeFillIn: () => {
+            },
+            afterFillIn: () => {
+            },
         };
     }
 
@@ -234,7 +248,7 @@ class ModelBuilder {
 
     /**
      * Добавляет новый внутренний API-ресурс модели в список внутренних ресурсов. Внутренние ресурсы имеют URL вида
-     * BASE_URL/RESURCE/INNER_RESOURCE
+     * BASE_URL/RESOURCE/INNER_RESOURCE
      * @param resource Часть URL внутреннего ресурса после названия основного ресурса.
      * @since 1.0.0
      * @author Михаил Кормановский
@@ -254,6 +268,30 @@ class ModelBuilder {
      */
     setInnerResources(resources) {
         this.config.innerResources = resources;
+        return this;
+    }
+
+    /**
+     * Устанавливает функцию, которая выполнится перед заполнением объекта данными.
+     * @param {Function} beforeFillIn Устанавливаемая функция
+     * @since 1.0.0
+     * @author Михаил Кормановский
+     * @returns {ModelBuilder} Текущий объект строителя
+     */
+    setBeforeFillIn(beforeFillIn) {
+        this.config.beforeFillIn = beforeFillIn;
+        return this;
+    }
+
+    /**
+     * Устанавливает функцию, которая выполнится после заполнения объекта данными.
+     * @param {Function} afterFillIn Устанавливаемая функция
+     * @since 1.0.0
+     * @author Михаил Кормановский
+     * @returns {ModelBuilder} Текущий объект строителя
+     */
+    setAfterFillIn(afterFillIn) {
+        this.config.afterFillIn = afterFillIn;
         return this;
     }
 
