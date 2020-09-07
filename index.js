@@ -3,7 +3,7 @@ import {camelCaseToHyphen} from "./util";
 
 /**
  * @class NoResourceError
- * @since 21.11.2019
+ * @since 1.0.0
  * @author Михаил Кормановский
  * Ошибка, которая выбрасывается, если у модели нет API-ресурса.
  */
@@ -17,7 +17,7 @@ class NoResourceError extends Error {
 
 /**
  * @class NoBaseURLError
- * @since 07.09.2020
+ * @since 1.0.0
  * @author Михаил Кормановский
  * Ошибка, которая выбрасывается, если при создании модели не указан базовый URL.
  */
@@ -32,7 +32,7 @@ class NoBaseURLError extends Error {
 /**
  * Абстрактный класс модели. Сдержит общую логику для всех моделей.
  * @class Model
- * @since 21.11.2019
+ * @since 1.0.0
  * @author Михаил Кормановский
  * @see RestClient
  *
@@ -46,7 +46,7 @@ class Model {
      * @param {Number|Object} arg Аргумент.
      * @see #fillIn
      * @see #$resource
-     * @since 21.11.2019
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     constructor(arg) {
@@ -70,7 +70,7 @@ class Model {
      * после заполнения - метод @method Model#afterFillIn .
      * @param {Object} obj Объект с новыми данными.
      * @returns {Model} Возвращает данный объект, но с новыми данными.
-     * @since 21.11.2019
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     fillIn(obj) {
@@ -104,7 +104,7 @@ class Model {
      * @param args Дополнительные GET параметры. ПО умолчанию - пустой объект.
      * @returns {Array} Массив с полученными объектами.
      * @see #$resource
-     * @since 21.11.2019
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     static async list(args) {
@@ -126,7 +126,7 @@ class Model {
      * @param {Object} data Данные нового объекта.
      * @returns {Model} Возвращает созданный объект.
      * @see #$resource
-     * @since 21.11.2019
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     static async create(data) {
@@ -140,7 +140,7 @@ class Model {
      * @async
      * @returns Возвращает скачанный объект.
      * @see #$resource
-     * @since 21.11.2019
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     async retrieve() {
@@ -153,7 +153,7 @@ class Model {
      * @param {Object} data Новые данные.
      * @returns Возвращает обновленный объект.
      * @see #$resource
-     * @since 21.11.2019
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     async update(data) {
@@ -166,7 +166,7 @@ class Model {
      * @returns Возвращает Promise от библиотеки RestClient.
      * @see RestClient#delete
      * @see #$resource
-     * @since 21.11.2019
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     delete() {
@@ -177,7 +177,7 @@ class Model {
 /**
  * Строитель модели. Собирает настройки с помощью цепочки вызовов.
  * @class ModelBuilder
- * @since 07.09.2020
+ * @since 1.0.0
  * @author Михаил Кормановский
  */
 class ModelBuilder {
@@ -196,7 +196,7 @@ class ModelBuilder {
      * текущего xhr-запроса.
      * @param listener Добавляемый слушатель события
      * @returns {ModelBuilder} Текущий объект строителя.
-     * @since 08.09.2020
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     addOnRequestListener(listener) {
@@ -210,7 +210,7 @@ class ModelBuilder {
      * @example Для модели Car из API http://cars.com/api/ будет исполльзоваться URL:
      * http://cars.com/api/cars. В этот метод нужно передать "http://cars.com/api/".
      * @returns {ModelBuilder} Текущий объект строителя.
-     * @since 08.09.2020
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     setBaseURL(baseURL) {
@@ -224,7 +224,7 @@ class ModelBuilder {
      * @example Для модели Car из API http://cars.com/api/ будет исполльзоваться URL:
      * http://cars.com/api/cars. В этот метод нужно передать "cars".
      * @returns {ModelBuilder} Текущий объект строителя.
-     * @since 08.09.2020
+     * @since 1.0.0
      * @author Михаил Кормановский
      */
     setResource(resource) {
@@ -236,7 +236,7 @@ class ModelBuilder {
      * Добавляет новый внутренний API-ресурс модели в список внутренних ресурсов. Внутренние ресурсы имеют URL вида
      * BASE_URL/RESURCE/INNER_RESOURCE
      * @param resource Часть URL внутреннего ресурса после названия основного ресурса.
-     * @since 08.09.2020
+     * @since 1.0.0
      * @author Михаил Кормановский
      * @returns {ModelBuilder} Текущий объект строителя.
      */
@@ -248,7 +248,7 @@ class ModelBuilder {
     /**
      * Перезаписывает список внутренних API-ресурсов модели.
      * @param resources Список, содержащий часть URL внутренних ресурсов после названия основного ресурса.
-     * @since 08.09.2020
+     * @since 1.0.0
      * @author Михаил Кормановский
      * @returns {ModelBuilder} Текущий объект строителя.
      */
@@ -260,7 +260,7 @@ class ModelBuilder {
     /**
      * Строит класс модели.
      * @returns {any}
-     * @since 08.09.2020
+     * @since 1.0.0
      * @author Михаил Кормановский
      * @throws NoBaseURLError
      * @throws NoResourceError
