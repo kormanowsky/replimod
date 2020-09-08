@@ -1,5 +1,5 @@
 // 1. Import Model class.
-import Model from "./model";
+import Model from "./index";
 
 // 2. Set base URL.
 Model.baseURL("https://myapi.com/api");
@@ -11,6 +11,11 @@ class Car extends Model{
     // This method will connect to https://myapi.com/api/cars/%CAR_ID%/repair using POST method
     async repair(){
         return this.apiClient().repair.post();
+    }
+
+    // This will connect to https://myapi.com/api/cars/repair-all using POST method
+    static async repairAll(){
+        return this.apiClient()["repair-all"].post();
     }
 }
 
