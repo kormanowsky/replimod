@@ -1,9 +1,18 @@
-import ModelBuilder from "./index";
+// 1. Import Model class.
+import Model from "./model";
 
-const MyAPIModelBuilder = new ModelBuilder().setBaseURL("http://mysite.com/my-api");
-const MyNiceModel = MyAPIModelBuilder.setResource("nice-models").build();
+// 2. Set base URL.
+Model.baseURL("https://myapi.com/api");
 
-const niceObject = new MyNiceModel(1);
-niceObject.retrieve().then(niceObject => {
-    console.log(niceObject.id);
-});
+// 3. Inherit from Model class
+class Car extends Model{
+
+    // 3.1 Each method of the class will be converted to API resource
+    // This method will connect to https://myapi.com/api/cars/%CAR_ID%/repair using POST method
+    async repair(){
+        return this.apiClient().repair.post();
+    }
+}
+
+// 4. Add name for your model
+Car.useName("cars");
