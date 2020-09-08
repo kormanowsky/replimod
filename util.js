@@ -20,7 +20,7 @@ function allMethodsOf(klass) {
  */
 function camelToKebab(input) {
     for (let i = 0; i < input.length; ++i) {
-        if (input[i].toUpperCase() === input[i] && i > 0) {
+        if(/[A-ZА-Я]/.test(input[i]) && i > 0) {
             input = input.replace(input[i], "-" + input[i].toLowerCase());
         }
     }
