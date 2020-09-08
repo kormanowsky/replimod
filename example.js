@@ -2,7 +2,7 @@
 import Model from "./index";
 
 // 2. Set base URL.
-Model.baseURL("https://myapi.com/api");
+Model.useBaseURL("https://myapi.com/api");
 
 // 3. Inherit from Model class
 class Car extends Model{
