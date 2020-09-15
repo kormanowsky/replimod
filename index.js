@@ -62,17 +62,15 @@ class Model {
    * @author Mikhail Kormanowsky
    * @since 2.0.0
    */
-  static apiClient() {
-    if (!this._apiClient) {
-      this._apiClient = new RestClient(this.baseURL);
-      this._apiClient.res(this.modelName).res(
-        allMethodsOf(this)
-          .filter((method) => method !== "constructor")
-          .map((method) => camelToKebab(method))
-      );
-      this._apiClient.on("request", this.onRequest);
-    }
-    return this._apiClient;
+  static get apiClient() {
+    const client = new RestClient(this.baseURL);
+    client.res(this.modelName).res(
+      allMethodsOf(this)
+        .filter((method) => method !== "constructor")
+        .map((method) => camelToKebab(method))
+    );
+    client.on("request", this.onRequest);
+    return client[this.modelName];
   }
 
   // The constructor and instance API client.
@@ -95,8 +93,8 @@ class Model {
    * @author Mikhail Kormanowsky
    * @since 2.0.0
    */
-  apiClient() {
-    const client = this.constructor.apiClient();
+  get apiClient() {
+    const client = this.constructor.apiClient;
     if (this.id) {
       return client(this.id);
     }
@@ -164,7 +162,7 @@ class Model {
    */
   static async list(args) {
     args = args || {};
-    let list = await this.apiClient().get(args);
+    let list = await this.apiClient.get(args);
     return list.map((obj) => this.newInstance().fillIn(obj));
   }
 
@@ -177,7 +175,7 @@ class Model {
    */
   static async create(data) {
     let instance = this.newInstance();
-    return instance.fillIn(await instance.apiClient().post(data));
+    return instance.fillIn(await instance.apiClient.post(data));
   }
 
   /**
@@ -187,7 +185,7 @@ class Model {
    * @since 2.0.0
    */
   async retrieve() {
-    return this.fillIn(await this.apiClient().get());
+    return this.fillIn(await this.apiClient.get());
   }
 
   /**
@@ -198,7 +196,7 @@ class Model {
    * @since 2.0.0
    */
   async update(data) {
-    return this.fillIn(await this.apiClient().patch(data));
+    return this.fillIn(await this.apiClient.patch(data));
   }
 
   /**
@@ -208,7 +206,7 @@ class Model {
    * @since 2.0.0
    */
   delete() {
-    return this.apiClient().delete();
+    return this.apiClient.delete();
   }
 }
 
