@@ -45,6 +45,18 @@ class Model {
   }
 
   /**
+   * Sets .conf property for this class.
+   * conf is RestClient's configuration
+   * @param conf The configuration
+   * @example {contentType: 'application/x-www-form-urlencoded'}
+   * @author Mikhail Kormanowsky
+   * @since 2.2.0
+   */
+  static useConf(conf) {
+    this.conf = conf;
+  }
+
+  /**
    * An abstract method which gets called before each request.
    * @param xhr A XMLHttpRequest object with current request.
    * @author Mikhail Kormanowsky
@@ -64,11 +76,14 @@ class Model {
    */
   static get apiClient() {
     const client = new RestClient(this.baseURL);
-    client.res(this.modelName).res(
-      allMethodsOf(this)
-        .filter((method) => method !== "constructor")
-        .map((method) => camelToKebab(method))
-    );
+    client
+      .conf(this.conf || {})
+      .res(this.modelName)
+      .res(
+        allMethodsOf(this)
+          .filter((method) => method !== "constructor")
+          .map((method) => camelToKebab(method))
+      );
     client.on("request", this.onRequest);
     return client[this.modelName];
   }
