@@ -75,9 +75,8 @@ class Model {
    * @since 2.0.0
    */
   static get apiClient() {
-    const client = new RestClient(this.baseURL);
+    const client = new RestClient(this.baseURL, this.conf || {});
     client
-      .conf(this.conf || {})
       .res(this.modelName)
       .res(
         allMethodsOf(this)
