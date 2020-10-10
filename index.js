@@ -85,16 +85,17 @@ class Model {
     return client[this.modelName];
   }
 
-  // The constructor and instance API client.
+  // The constructor and instance of API client.
 
   /**
-   * The constructor. Sets .id property.
+   * The constructor. Sets ._id and ._data properties.
    * @param id The ID of the object.
    * @author Mikhail Kormanowsky
    * @since 2.0.0
    */
   constructor(id) {
-    this.id = id;
+    this._id = id;
+    this._data = {};
   }
 
   /**

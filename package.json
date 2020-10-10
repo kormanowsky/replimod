@@ -1,6 +1,6 @@
 {
   "name": "replimod",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "The REST API client-side model utility class",
   "main": "index.js",
   "scripts": {
