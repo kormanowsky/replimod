@@ -129,6 +129,7 @@ class Model {
     for (let prop of Object.getOwnPropertyNames(obj)) {
       this._data[prop] = obj[prop];
     }
+    return this;
   }
 
   // Basic API methods
