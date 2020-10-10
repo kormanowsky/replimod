@@ -118,8 +118,7 @@ class Model {
   /**
    * Fills in this instance with data of given object obj.
    * @param obj An object to get the data from.
-   * @returns {*} Returns this instance with given data.
-   * @description This method calls .preFillIn(), then fills in the instance, then calls .postFillIn().
+   * @returns {*} Returns this instance with given data in ._data.
    * @author Mikhail Kormanowsky
    * @since 2.0.0
    */
