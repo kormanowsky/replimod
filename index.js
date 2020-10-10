@@ -108,8 +108,8 @@ class Model {
    */
   get apiClient() {
     const client = this.constructor.apiClient;
-    if (this.id) {
-      return client(this.id);
+    if (this._id) {
+      return client(this._id);
     }
     return client;
   }
