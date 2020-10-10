@@ -76,13 +76,11 @@ class Model {
    */
   static get apiClient() {
     const client = new RestClient(this.baseURL, this.conf || {});
-    client
-      .res(this.modelName)
-      .res(
-        allMethodsOf(this)
-          .filter((method) => method !== "constructor")
-          .map((method) => camelToKebab(method))
-      );
+    client.res(this.modelName).res(
+      allMethodsOf(this)
+        .filter((method) => method !== "constructor")
+        .map((method) => camelToKebab(method))
+    );
     client.on("request", this.onRequest);
     return client[this.modelName];
   }
@@ -151,6 +149,9 @@ class Model {
    */
   fillIn(obj) {
     obj = this.preFillIn(obj);
+    if (!(this._data instanceof Object)) {
+      this._data = {};
+    }
     for (let prop of Object.getOwnPropertyNames(obj)) {
       if (obj[prop] instanceof String) {
         let date = new Date(obj[prop]);
@@ -158,9 +159,7 @@ class Model {
           obj[prop] = date;
         }
       }
-      if (!(this[prop] instanceof Function)) {
-        this[prop] = obj[prop];
-      }
+      this._data[prop] = obj[prop];
     }
     return this.postFillIn(this);
   }
