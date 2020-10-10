@@ -151,14 +151,14 @@ class Model {
    */
   fillIn(obj) {
     obj = this.preFillIn(obj);
-    for (let prop in Object.getOwnPropertyNames(obj)) {
+    for (let prop of Object.getOwnPropertyNames(obj)) {
       if (obj[prop] instanceof String) {
         let date = new Date(obj[prop]);
         if (date.toString() && date.toString() !== "Invalid Date") {
           obj[prop] = date;
         }
       }
-      if (!this[prop] || !(this[prop] instanceof Function)) {
+      if (!(this[prop] instanceof Function)) {
         this[prop] = obj[prop];
       }
     }
