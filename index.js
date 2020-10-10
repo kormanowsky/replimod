@@ -116,30 +116,6 @@ class Model {
   // Filling in
 
   /**
-   * An abstract method for preparing retrieved object for filling in.
-   * @example Conversion from raw objects to Model instances may be included here.
-   * @param obj An object to prepare.
-   * @returns {*} Must return given object with applied changes.
-   * @author Mikhail Kormanowsky
-   * @since 2.0.0
-   */
-  preFillIn(obj) {
-    return obj;
-  }
-
-  /**
-   * An abstract method for finishing the filling in process.
-   * @example Additional changes may be made here.
-   * @param obj An object to change.
-   * @returns {*} Must return given object with applied changes.
-   * @author Mikhail Kormanowsky
-   * @since 2.0.0
-   */
-  postFillIn(obj) {
-    return obj;
-  }
-
-  /**
    * Fills in this instance with data of given object obj.
    * @param obj An object to get the data from.
    * @returns {*} Returns this instance with given data.
@@ -148,20 +124,12 @@ class Model {
    * @since 2.0.0
    */
   fillIn(obj) {
-    obj = this.preFillIn(obj);
     if (!(this._data instanceof Object)) {
       this._data = {};
     }
     for (let prop of Object.getOwnPropertyNames(obj)) {
-      if (obj[prop] instanceof String) {
-        let date = new Date(obj[prop]);
-        if (date.toString() && date.toString() !== "Invalid Date") {
-          obj[prop] = date;
-        }
-      }
       this._data[prop] = obj[prop];
     }
-    return this.postFillIn(this);
   }
 
   // Basic API methods
